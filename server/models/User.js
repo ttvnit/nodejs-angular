@@ -40,19 +40,19 @@ module.exports = {
         if(users.length > 500) {
             users = users.slice(0, 2);
         }
-
+        var pass = crypto.createHash('md5').update(password).digest('hex');
         var user = {
             uid:         _.max(users, function(user) { return user.uid; }).uid + 1,
             username:   username,
-            pass:   password,
-            role:       role
+            pass:   pass,
+            role:      JSON.stringify(role)
         };
         users.push(user);
         
         data = {
         		uid : null,
-        		name : username,
-        		pass : crypto.createHash('md5').update(password).digest('hex'),
+        		username : username,
+        		pass : pass,
         		created: new Date().getTime(),
         		status: 1,
         		role:  role

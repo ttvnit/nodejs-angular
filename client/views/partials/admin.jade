@@ -6,6 +6,7 @@ table.table.table-striped(data-ng-hide="loading")
         tr
             th #
             th Username
+            th E-mail
             th Fullname
             th Role
     tbody
@@ -17,6 +18,7 @@ table.table.table-striped(data-ng-hide="loading")
                i.icon-google-plus-sign(data-ng-show="user.provider == 'google'")
                i.icon-linkedin(data-ng-show="user.provider == 'linkedin'")
                |  {{ user.username }}
+            td {{user.mail}}
             td {{ user.first_name + ' ' + user.last_name}}
             td
                 span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}

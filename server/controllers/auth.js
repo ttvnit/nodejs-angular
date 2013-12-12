@@ -16,7 +16,7 @@ module.exports = {
 
             req.logIn(user, function(err) {
                 if(err)     { next(err); }
-                else        { res.json(200, { "role": JSON.parse(user.role), "username": user.username }); }
+                else        { res.json(200, { "role": user.role, "username": user.username }); }
             });
         });
     },
