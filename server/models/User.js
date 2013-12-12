@@ -1,28 +1,38 @@
 var User
-	, mysql = 			require('mysql')
+	, db = 				require('../../server/models/db')
     , _ =               require('underscore')
     , passport =        require('passport')
     , LocalStrategy =   require('passport-local').Strategy
     , check =           require('validator').check
     , userRoles =       require('../../client/js/routingConfig').userRoles
-    , settings =       	require('../config').settings;
-console.log(settings);
-var users = [
-    {
-        id:         1,
-        username:   "user",
-        password:   "123",
-        role:   userRoles.user
-    },
-    {
-        id:         2,
-        username:   "admin",
-        password:   "123",
-        role:   userRoles.admin
-    }
-];
+	, crypto = 			require('crypto');
 
+//db.update('users',{role:userRoles.user},['uid = ?',[2]]);    
 module.exports = {
+	getListUser: function(){
+		db.client.query("select * from users where uid <>?",[0],
+				function selectCb(err, results, fields) {
+					if (err) throw err;
+					/*callback();*/
+					//callback(results,fields);
+					users = results;
+				});
+		
+		/*return [
+	    {
+	        id:         1,
+	        username:   "user",
+	        password:   "123",
+	        role:   userRoles.user
+	    },
+	    {
+	        id:         2,
+	        username:   "admin",
+	        password:   "123",
+	        role:   userRoles.admin
+	    }
+	];*/
+	},
     addUser: function(username, password, role, callback) {
         if(this.findByUsername(username) !== undefined)  return callback("UserAlreadyExists");
 
@@ -32,12 +42,22 @@ module.exports = {
         }
 
         var user = {
-            id:         _.max(users, function(user) { return user.id; }).id + 1,
+            uid:         _.max(users, function(user) { return user.uid; }).uid + 1,
             username:   username,
-            password:   password,
+            pass:   password,
             role:       role
         };
         users.push(user);
+        
+        data = {
+        		uid : null,
+        		name : username,
+        		pass : crypto.createHash('md5').update(password).digest('hex'),
+        		created: new Date().getTime(),
+        		status: 1,
+        		role:  role
+        		};
+        db.insert('users',data);
         callback(null, user);
     },
 
@@ -45,7 +65,7 @@ module.exports = {
         var user = module.exports.findByProviderId(provider, providerId);
         if(!user) {
             user = {
-                id: _.max(users, function(user) { return user.id; }).id + 1,
+                uid: _.max(users, function(user) { return user.uid; }).uid + 1,
                 username: provider + '_user', // Should keep Oauth users anonymous on demo site
                 role: userRoles.user,
                 provider: provider
@@ -58,11 +78,13 @@ module.exports = {
     },
 
     findAll: function() {
-        return _.map(users, function(user) { return _.clone(user); });
+        return _.map(users, function(user) {
+        	return _.clone(user); 
+        });
     },
 
     findById: function(id) {
-        return _.clone(_.find(users, function(user) { return user.id === id; }));
+        return _.clone(_.find(users, function(user) { return user.uid === id; }));
     },
 
     findByUsername: function(username) {
@@ -89,11 +111,12 @@ module.exports = {
         function(username, password, done) {
 
             var user = module.exports.findByUsername(username);
-
+            user.role = JSON.parse(user.role);
+            
             if(!user) {
                 done(null, false, { message: 'Incorrect username.' });
             }
-            else if(user.password != password) {
+            else if(user.pass != crypto.createHash('md5').update(password).digest('hex')) {
                 done(null, false, { message: 'Incorrect username.' });
             }
             else {
@@ -103,13 +126,19 @@ module.exports = {
         }
     ),
     serializeUser: function(user, done) {
-        done(null, user.id);
+        done(null, user.uid);
     },
 
     deserializeUser: function(id, done) {
         var user = module.exports.findById(id);
 
-        if(user)    { done(null, user); }
+        if(user)    { 
+        	user.role = JSON.parse(user.role);
+        	done(null, user); 
+        }
         else        { done(null, false); }
     }
 };
+module.exports.getListUser();
+//var users = module.exports.getListUser();
+//console.log(users);

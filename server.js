@@ -1,3 +1,5 @@
+root.settings =       	require('./server/config').settings;
+
 var express =       require('express')
     , http =        require('http')
     , passport =    require('passport')

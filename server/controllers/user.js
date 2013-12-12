@@ -6,7 +6,10 @@ module.exports = {
     index: function(req, res) {
         var users = User.findAll();
         _.each(users, function(user) {
-            delete user.password;
+        	if(user.role){
+        		user.role = JSON.parse(user.role);
+        	}
+            delete user.pass;
             delete user.twitter;
             delete user.facebook;
             delete user.google;

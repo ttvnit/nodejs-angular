@@ -23,7 +23,7 @@ app.controller('LoginCtrl', [ '$rootScope', '$scope', '$location', '$window',
 			$scope.login = function() {
 				Auth.login({
 					username : $scope.username,
-					password : $scope.password,
+					password : $('#lgpassword').val(),//$scope.password
 					rememberme : $scope.rememberme
 				}, function(res) {
 					$location.path('/');

@@ -1,7 +1,5 @@
 .hero-unit
-    h1 Log in
-    p You can either register a new user, log in with one of the two predefined users...
-        |(<b><i>admin/123</i></b> or <b><i>user/123</i></b>)
+    h1.login-title Log in
     form.form-horizontal(ng-submit="login()", name="loginForm")
         .control-group
             label.control-label(for="username") Username
@@ -10,11 +8,11 @@
         .control-group
             label.control-label(for="password") Password
             .controls
-                input(type="password", data-ng-model="password", placeholder="Password", name="password", required)
+                input(type="password", data-ng-model="password", placeholder="Password", id="lgpassword",  name="password")
         .control-group
             .controls
                 label(for="rememberme").checkbox
-                    input(type="checkbox", data-ng-model="rememberme", name="rememberme")
+                    input(id="rememberme" ,type="checkbox", data-ng-model="rememberme", name="rememberme")
                     | Remember me
         .control-group
             .controls
