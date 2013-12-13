@@ -17,13 +17,14 @@ table.table.table-striped(data-ng-hide="loading")
             td
                 div(class="animate-switch-container", ng-switch on="selection")
                     div(class="animate-switch",ng-switch-when="welcome")
-                        |Welcome to simple chat app <br /> Chose one friend on left frame to start 
+                        |Welcome to simple chat app <br /> {{connecting}} 
                     div(class="animate-switch" ng-switch-when="chatting")
                         div#friendInfor
                             input(type="hidden",name="currentFriend", ng-value="friend.username")
                             h2 You are chatting with {{friend.fullname}}
-                        div#messageWrapper
-                            div#messageContent
+                        div#chatWrapper
+                            div#messageWrapper
+                                div#messageContent
                         form.formChat(ng-submit="sendMessage()", id="chatForm", name="chatForm")
-                            textarea(id="txtChatContent",name="txtChatContent", ng-change="typingMessage()", ng-keypress="messageEvent($event)", required)
+                            textarea(id="txtChatContent",name="message", ng-change="typingMessage()", ng-keypress="messageEvent($event)", ng-model="message", required) {{message}}
                             input( type="submit", id="btnSend", name="btnSend", value="Send") 

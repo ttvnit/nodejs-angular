@@ -8,6 +8,11 @@ var express =       require('express')
 
 var app = module.exports = express();
 
+app.configure(function() {
+	app.set('port', process.env.PORT || 8000);
+	app.use(express.favicon());
+});
+
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
 app.use(express.logger('dev'));
@@ -33,11 +38,15 @@ passport.serializeUser(User.serializeUser);
 passport.deserializeUser(User.deserializeUser);
 
 require('./server/routes.js')(app);
-
-app.set('port', process.env.PORT || 8000);
-
-//module.exports.server = http.createServer(app);
-
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+require('./server/models/socket')(server);
+server.listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
 });
+
+/*app.start = app.listen = function(){
+	  return server.listen.apply(server, arguments);
+}
+app.start(8000);*/
+	
+	

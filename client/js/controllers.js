@@ -66,6 +66,8 @@ app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
     function($rootScope, $scope, Users, Auth) {
 		$scope.loading = true;
 		$scope.userRoles = Auth.userRoles;
+		$scope.message = '';
+		$scope.connecting = 'Please waiting...';
 		Users.getAll(function(res) {
 			$scope.users = res;
 			$scope.loading = false;
@@ -78,19 +80,69 @@ app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
 			$scope.friend = {username:user.username,fullname: (user.first_name?user.first_name + ' ' + user.last_name:user.username)};
 			console.log('Clicked friend');
 		};
+		
 		$scope.sendMessage = function() {
-			alert('send message');
+			socket.emit("private", { msg:  this.message , to: $scope.friend.username });
+			$("div#messageContent").append("<br />\r\n" + Auth.user.username + ': ' + this.message);
+             // then we empty the text on the input box.
+			this.message = '';
+			$('#messageWrapper').animate({ scrollTop: $('#messageWrapper').attr("scrollHeight") - $('#messageWrapper').height() }, 'fast','swing');
+			
+			/*$('#messageWrapper').animate({
+		          scrollTop: $('#messageContent').offset().height
+		        }, 'fast','swing');*/
+			 
 		};
 		$scope.messageEvent = function(ev){
 			if(ev.keyCode == 13 && !ev.ctrlKey){
-				alert('send message');
+				this.sendMessage();
+				ev.returnValue=false;
+				ev.cancelBubble=true;
 			}
 		};
 		$scope.typingMessage = function() {
-			alert(222);
 			console.log('Typing...');
 		};
 		$scope.selection = 'welcome';
+		
+		//var url = 'http://192.168.0.115:8000/';
+        var socket = io.connect('/');
+        
+        
+        socket.on('chat', function (data) {
+        	console.log(data);
+        });
+        socket.on("private", function(data) {        	 
+       	 	//console.log(data);
+        	$("div#messageContent").append("<br />\r\n" + data.from + ': ' + data.msg);
+        }); 
+        socket.on('broadcast', function (data) {
+        	console.log(data);
+        	if(data.tom){
+				 switch(data.tom){
+				 case 'welcome':
+				 if(name == data.user){
+					 $("p#log").html('Hi: ' + data.user);
+				 }else{
+					 $("p#log").html(data.user + ' joined');
+						 }
+						 break;
+					 }
+			}
+        });
+        socket.on('connect', function() {
+        	$scope.connecting = 'Chose one friend on left frame to start';
+        	$scope.$apply();
+        	socket.emit('register', Auth.user.username);
+         });
+        
+        socket.on('disconnect', function($scope) {
+        	$scope.connecting = 'Please waiting...';
+            socket.emit('DelPlayer', Auth.user.username);
+        });
+        socket.on('error', function (e) {
+            console.log('System', e ? e : 'A unknown error occurred');
+        });
 } ]);
 app.controller('AdminCtrl', [ '$rootScope', '$scope', 'Users', 'Auth',
 		function($rootScope, $scope, Users, Auth) {
