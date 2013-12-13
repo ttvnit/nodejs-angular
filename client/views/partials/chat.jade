@@ -1,0 +1,29 @@
+h1 Chat view
+table.table.table-striped(data-ng-hide="loading")
+    thead
+        tr
+            th List friend
+            th Message
+    tbody
+        tr
+            td.leftSiderbar
+                label(for="txtSearchFriend") Search:
+                input(id="txtSearchFriend", ng-model="searchText")
+                div#listWrapper    
+                    ul#listUser
+                        li(data-ng-repeat="user in users | filter:searchText",ng-class-odd="'odd'",ng-class-even="'even'")
+                            a(id="{{ user.username }}", href="javascript:;",ng-click="chatFriend(user)")
+                                |  {{ (user.first_name != '' ) && ( user.first_name + ' ' + user.last_name) || user.username}}
+            td
+                div(class="animate-switch-container", ng-switch on="selection")
+                    div(class="animate-switch",ng-switch-when="welcome")
+                        |Welcome to simple chat app <br /> Chose one friend on left frame to start 
+                    div(class="animate-switch" ng-switch-when="chatting")
+                        div#friendInfor
+                            input(type="hidden",name="currentFriend", ng-value="friend.username")
+                            h2 You are chatting with {{friend.fullname}}
+                        div#messageWrapper
+                            div#messageContent
+                        form.formChat(ng-submit="sendMessage()", id="chatForm", name="chatForm")
+                            textarea(id="txtChatContent",name="txtChatContent", ng-change="typingMessage()", ng-keypress="messageEvent($event)", required)
+                            input( type="submit", id="btnSend", name="btnSend", value="Send") 

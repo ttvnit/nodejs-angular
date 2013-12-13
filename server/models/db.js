@@ -8,7 +8,7 @@ module.exports = {
 				return val.replace("'","\'"); 
 				break;
 			case 'object':
-				return "'"+ JSON.stringify(val) + "'"; 
+				return JSON.stringify(val); 
 			default:
 				return "'"+ val + "'"; 
 			}

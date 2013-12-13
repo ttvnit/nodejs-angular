@@ -11,37 +11,46 @@ var app = angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute'])
             templateUrl:    'home',
             controller:     'HomeCtrl',
             access:         access.user
-        });
-    $routeProvider.when('/login',
+        })
+        .when('/login',
         {
             templateUrl:    'login',
             controller:     'LoginCtrl',
             access:         access.anon
-        });
-    $routeProvider.when('/register',
+        })
+        .when('/register',
         {
             templateUrl:    'register',
             controller:     'RegisterCtrl',
             access:         access.anon
-        });
-    $routeProvider.when('/private',
+        })
+    	.when('/private',
         {
             templateUrl:    'private',
             controller:     'PrivateCtrl',
             access:         access.user
-        });
-    $routeProvider.when('/admin',
+        })
+        .when('/chat',
+        {
+            templateUrl:    'chat',
+            controller:     'ChatCtrl',
+            access:         access.user
+        })
+    	.when('/admin',
         {
             templateUrl:    'admin',
             controller:     'AdminCtrl',
             access:         access.admin
-        });
-    $routeProvider.when('/404',
+        })
+    	.when('/404',
         {
             templateUrl:    '404',
             access:         access.public
+        })
+        .otherwise({
+        	redirectTo:'/404',
+        	//template: "This doesn't exist!"  
         });
-    $routeProvider.otherwise({redirectTo:'/404'});
 
     $locationProvider.html5Mode(true);
 

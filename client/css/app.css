@@ -6,7 +6,7 @@ body {
     font-size: 1em;
 }
 #main {
-	max-width: 600px;
+	max-width: 800px;
 	margin:auto;
 }
 #cover {
@@ -789,66 +789,6 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     display: table-cell;
     float: none;
     margin-left: 0;
-}
-.table td.span1, .table th.span1 {
-    float: none;
-    margin-left: 0;
-    width: 44px;
-}
-.table td.span2, .table th.span2 {
-    float: none;
-    margin-left: 0;
-    width: 124px;
-}
-.table td.span3, .table th.span3 {
-    float: none;
-    margin-left: 0;
-    width: 204px;
-}
-.table td.span4, .table th.span4 {
-    float: none;
-    margin-left: 0;
-    width: 284px;
-}
-.table td.span5, .table th.span5 {
-    float: none;
-    margin-left: 0;
-    width: 364px;
-}
-.table td.span6, .table th.span6 {
-    float: none;
-    margin-left: 0;
-    width: 444px;
-}
-.table td.span7, .table th.span7 {
-    float: none;
-    margin-left: 0;
-    width: 524px;
-}
-.table td.span8, .table th.span8 {
-    float: none;
-    margin-left: 0;
-    width: 604px;
-}
-.table td.span9, .table th.span9 {
-    float: none;
-    margin-left: 0;
-    width: 684px;
-}
-.table td.span10, .table th.span10 {
-    float: none;
-    margin-left: 0;
-    width: 764px;
-}
-.table td.span11, .table th.span11 {
-    float: none;
-    margin-left: 0;
-    width: 844px;
-}
-.table td.span12, .table th.span12 {
-    float: none;
-    margin-left: 0;
-    width: 924px;
 }
 .table tbody tr.success > td {
     background-color: #DFF0D8;
@@ -4226,4 +4166,37 @@ body {
     height: auto !important;
     overflow: visible !important;
 }
+}
+
+table td.leftSiderbar {
+    border-right: 1px solid #DDDDDD;
+    width:50%;
+}
+div#listWrapper {
+	position:relative;
+	height: 150px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+ul#listUser {
+	position:ablosute;
+}
+ul#listUser li {
+	line-height: 25px;
+}
+div.animate-switch {
+	height: 400px;
+}
+#messageWrapper {
+	position:relative;
+    overflow: auto;
+    overflow-x: hidden;
+	height: 300px;
+}
+#messageContent {
+	position:ablosute;
+}
+#chatForm textarea,
+#chatForm input {
+	float:left;
 }

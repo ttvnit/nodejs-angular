@@ -60,8 +60,38 @@ app.controller('RegisterCtrl', [ '$rootScope', '$scope', '$location', 'Auth',
 		} ]);
 
 app.controller('PrivateCtrl', [ '$rootScope', function($rootScope) {
+	
 } ]);
-
+app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
+    function($rootScope, $scope, Users, Auth) {
+		$scope.loading = true;
+		$scope.userRoles = Auth.userRoles;
+		Users.getAll(function(res) {
+			$scope.users = res;
+			$scope.loading = false;
+		}, function(err) {
+			$rootScope.error = "Failed to fetch users.";
+			$scope.loading = false;
+		});
+		$scope.chatFriend = function(user) {
+			$scope.selection = 'chatting';
+			$scope.friend = {username:user.username,fullname: (user.first_name?user.first_name + ' ' + user.last_name:user.username)};
+			console.log('Clicked friend');
+		};
+		$scope.sendMessage = function() {
+			alert('send message');
+		};
+		$scope.messageEvent = function(ev){
+			if(ev.keyCode == 13 && !ev.ctrlKey){
+				alert('send message');
+			}
+		};
+		$scope.typingMessage = function() {
+			alert(222);
+			console.log('Typing...');
+		};
+		$scope.selection = 'welcome';
+} ]);
 app.controller('AdminCtrl', [ '$rootScope', '$scope', 'Users', 'Auth',
 		function($rootScope, $scope, Users, Auth) {
 			$scope.loading = true;
@@ -75,4 +105,4 @@ app.controller('AdminCtrl', [ '$rootScope', '$scope', 'Users', 'Auth',
 				$scope.loading = false;
 			});
 
-		} ]);
+} ]);

@@ -5,20 +5,21 @@ table.table.table-striped(data-ng-hide="loading")
     thead
         tr
             th #
-            th Username
-            th E-mail
-            th Fullname
+            th 
+                a(href="" ng-click="predicate = 'username'; reverse=!reverse") Username
+            th
+                a(href="" ng-click="predicate = 'mail'; reverse=!reverse") E-mail
+            th
+                a(href="" ng-click="predicate = 'first_name'; reverse=!reverse") Fullname
+            th
+                a(href="" ng-click="predicate = 'created'; reverse=!reverse") Created
             th Role
     tbody
-        tr(data-ng-repeat="user in users")
+        tr(data-ng-repeat="user in users | orderBy:predicate:reverse")
             td {{ user.uid }}
-            td
-               i.icon-twitter(data-ng-show="user.provider == 'twitter'")
-               i.icon-facebook-sign(data-ng-show="user.provider == 'facebook'")
-               i.icon-google-plus-sign(data-ng-show="user.provider == 'google'")
-               i.icon-linkedin(data-ng-show="user.provider == 'linkedin'")
-               |  {{ user.username }}
-            td {{user.mail}}
-            td {{ user.first_name + ' ' + user.last_name}}
+            td {{ user.username }}
+            td {{ user.mail }}
+            td {{ user.first_name + ' ' + user.last_name }}
+            td {{ user.created * 1000 | date:'MM/dd/yyyy' }}
             td
                 span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
