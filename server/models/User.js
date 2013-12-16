@@ -7,7 +7,6 @@ var User
     , userRoles =       require('../../client/js/routingConfig').userRoles
 	, crypto = 			require('crypto');
 
-//db.update('users',{role:userRoles.user},['uid = ?',[2]]);    
 module.exports = {
 	getListUser: function(){
 		db.client.query("select * from users where uid <>?",[0],

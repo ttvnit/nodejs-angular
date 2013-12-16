@@ -3,8 +3,8 @@
 app.factory('Auth', function($http, $cookieStore){
     var accessLevels = routingConfig.accessLevels
         , userRoles = routingConfig.userRoles
-        , currentUser = $cookieStore.get('user') || { username: '', role: userRoles.public };
-
+        , currentUser = $cookieStore.get('user') || {uid: 0,  username: '', fullname: 'Anonymous',role: userRoles.public };
+        
     $cookieStore.remove('user');
 
     function changeUser(user) {
@@ -38,7 +38,8 @@ app.factory('Auth', function($http, $cookieStore){
         logout: function(success, error) {
             $http.post('/logout').success(function(){
                 changeUser({
-                    username: '',
+                    uid: '',
+                	username: '',
                     role: userRoles.public
                 });
                 success();
@@ -54,6 +55,14 @@ app.factory('Users', function($http) {
     return {
         getAll: function(success, error) {
             $http.get('/users').success(success).error(error);
+        }
+    };
+});
+
+app.factory('Messages',function($http) {
+    return {
+    	loadMessage: function(data, success, error) {
+            $http.post('/messages',data).success(success).error(error);
         }
     };
 });

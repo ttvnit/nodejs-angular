@@ -25,6 +25,9 @@ table.table.table-striped(data-ng-hide="loading")
                         div#chatWrapper
                             div#messageWrapper
                                 div#messageContent
+                                    div.line(data-ng-repeat="msg in messages")
+                                        label(class="{{addClass(msg.from_uid)}}") {{ (cuser.uid == msg.from_uid ) && (cuser.fullname) || friend.fullname}}
+                                        p.msg-content {{msg.message}}
                         form.formChat(ng-submit="sendMessage()", id="chatForm", name="chatForm")
                             textarea(id="txtChatContent",name="message", ng-change="typingMessage()", ng-keypress="messageEvent($event)", ng-model="message", required) {{message}}
                             input( type="submit", id="btnSend", name="btnSend", value="Send") 

@@ -10,10 +10,6 @@ module.exports = {
         		user.role = JSON.parse(user.role);
         	}
             delete user.pass;
-            delete user.twitter;
-            delete user.facebook;
-            delete user.google;
-            delete user.linkedin;
         });
         res.json(users);
     }

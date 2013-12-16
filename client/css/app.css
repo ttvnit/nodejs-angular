@@ -4204,8 +4204,32 @@ div.animate-switch {
 }
 #messageContent {
 	position:ablosute;
+	width: 350px;
 }
 #chatForm textarea,
 #chatForm input {
+	float:left;
+}
+#txtChatContent {
+	width:369px;
+}
+#messageContent div.line {
+	display:block;
+}
+#messageContent label {
+	clear:both;
+	width: 25%;
+	float:left;
+	text-align:right;
+	padding: 0px 6px 0 0;
+}
+#messageContent .mymessage{
+	color: #CECECE;
+}
+#messageContent .yourmessage{
+    color: #0088CC;
+}
+p.msg-content {
+	width: 70%;
 	float:left;
 }

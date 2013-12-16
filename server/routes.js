@@ -3,6 +3,7 @@ var _ =           require('underscore')
     , passport =  require('passport')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
+    , MessageCtrl =  require('./controllers/message')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -43,19 +44,28 @@ var routes = [
         middleware: [UserCtrl.index],
         accessLevel: accessLevels.admin
     },
-
+    // Message resource
+    {
+        path: '/messages',
+        httpMethod: 'POST',
+        middleware: [MessageCtrl.index],
+    },
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',
         httpMethod: 'GET',
         middleware: [function(req, res) {
-            var role = userRoles.public, username = '';
+            var role = userRoles.public, username = '', fullname='Anonymous',uid = 0;
             if(req.user) {
                 role = req.user.role;
                 username = req.user.username;
+                fullname = req.user.first_name?req.user.first_name+' ' + req.user.last_name : req.user.username;
+                uid = req.user.uid;
             }
             res.cookie('user', JSON.stringify({
-                'username': username,
+            	'uid': uid,
+            	'username': username,
+            	'fullname': fullname,
                 'role': role
             }));
             res.render('index');

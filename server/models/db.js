@@ -9,8 +9,10 @@ module.exports = {
 				break;
 			case 'object':
 				return JSON.stringify(val); 
+			case 'number':
 			default:
-				return "'"+ val + "'"; 
+				console.log(typeof val);
+				return val; 
 			}
 		},
 		setVal: function(values){
@@ -38,26 +40,33 @@ module.exports = {
 				field_val[i++] = this.filter(values[index]);
 			}
 			sql = sql + ' (' + field_name.join(',') + ') values ('+ field_params.join(',')  +')';
+			//console.log(sql);
 			this.client.query(sql , field_val, function(err,result){
 		        if(err){
 		            console.log("ClientReady Error:" + err.message);
 		            return;
 		        }
-		        //fn(result);
-		        console.log('Id inserted:'+ result.insertId);
+		        fn(result);
+		        //console.log('Id inserted:'+ result.insertId);
 		    });
 		},
 		update: function(table, values, condition) {
+			////db.update('users',{role:userRoles.user},['uid = ?',[2]]);    
 			var fields = Array(),i=0;
 			for (var index in values) {
 				fields[i] = index + '=' + this.filter(values[index]); 
 			}
 			var sql = 'update ' + table + ' set ' + fields.join(',') + ' where ' + condition[0];
-			
 			this.client.query(sql, condition[1],
 					function selectCb(err, details, fields) {
 						console.log(details);
 					});
+		},
+		query: function(sql,condition, fn) {
+			this.client.query(sql, condition,
+					function(err, result, fields) {
+						fn(result);
+			});
 		},
 		/*delete: function(){
 			this.client.query().

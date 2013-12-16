@@ -11,22 +11,20 @@ module.exports = {
         }
 
         User.addUser(req.body.username, req.body.password, req.body.role, function(err, user) {
-            if(err === 'UserAlreadyExists') return res.send(403, "User already exists");
+            if(err === 'UserAlreadyExists') return res.send(403, 'User already exists');
             else if(err)                    return res.send(500);
 
             req.logIn(user, function(err) {
                 if(err)     { next(err); }
-                else        { res.json(200, { "role": user.role, "username": user.username }); }
+                else        { res.json(200, {uid: user.uid, 'username': user.username, 'fullname': user.username, 'role': user.role}); }
             });
         });
     },
 
     login: function(req, res, next) {
         passport.authenticate('local', function(err, user) {
-        	console.log(user);
             if(err)     { return next(err); }
             if(!user)   { return res.send(400); }
-
 
             req.logIn(user, function(err) {
                 if(err) {
@@ -34,7 +32,8 @@ module.exports = {
                 }
 
                 if(req.body.rememberme) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-                res.json(200, { "role":  user.role, "username": user.username });
+                fullname = (user.first_name?user.first_name + ' ' + user.last_name:user.username);
+                res.json(200, {'uid' : user.uid , 'username': user.username, 'fullname': fullname, 'role':  user.role});
             });
         })(req, res, next);
     },

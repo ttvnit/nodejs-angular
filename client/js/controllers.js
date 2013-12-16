@@ -62,11 +62,19 @@ app.controller('RegisterCtrl', [ '$rootScope', '$scope', '$location', 'Auth',
 app.controller('PrivateCtrl', [ '$rootScope', function($rootScope) {
 	
 } ]);
-app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
-    function($rootScope, $scope, Users, Auth) {
+app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth','Messages',
+    function($rootScope, $scope, Users, Auth,Messages) {
+	console.log(Auth.user);
 		$scope.loading = true;
 		$scope.userRoles = Auth.userRoles;
+		$scope.messages = [];
 		$scope.message = '';
+		$scope.addClass = function(uid){
+			if(uid == Auth.user.uid)
+				return 'mymessage';
+			return 'yourmessage';
+		};
+		$scope.cuser = Auth.user;
 		$scope.connecting = 'Please waiting...';
 		Users.getAll(function(res) {
 			$scope.users = res;
@@ -77,28 +85,45 @@ app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
 		});
 		$scope.chatFriend = function(user) {
 			$scope.selection = 'chatting';
-			$scope.friend = {username:user.username,fullname: (user.first_name?user.first_name + ' ' + user.last_name:user.username)};
+			$scope.friend = {uid:user.uid, username:user.username,fullname: (user.first_name?user.first_name + ' ' + user.last_name:user.username)};
 			console.log('Clicked friend');
+			
+			Messages.loadMessage({
+				from: Auth.user.uid,
+				to : user.uid,
+			}, function(res) {
+				/* angular.forEach(res, function(todo) {
+					 if (!todo.done) $scope.todos.push(todo);
+				});*/
+				 
+				$scope.messages = res;
+				$scope.$apply();
+			}, function(err) {
+				alert(err);
+			});
 		};
 		
 		$scope.sendMessage = function() {
-			socket.emit("private", { msg:  this.message , to: $scope.friend.username });
-			$("div#messageContent").append("<br />\r\n" + Auth.user.username + ': ' + this.message);
+			socket.emit("private", {msg:  this.message , to: {uid:$scope.friend.uid,username: $scope.friend.username }});
+			$("div#messageContent").append("<div><label class='my_content'>" + Auth.user.username + "</label><p class='msg-content'>" + this.message + '<p></div>');
              // then we empty the text on the input box.
-			this.message = '';
-			$('#messageWrapper').animate({ scrollTop: $('#messageWrapper').attr("scrollHeight") - $('#messageWrapper').height() }, 'fast','swing');
+			jQuery('#messageWrapper').animate({ scrollTop: jQuery('div#messageContent').height()}, 'fast','swing');
 			
 			/*$('#messageWrapper').animate({
 		          scrollTop: $('#messageContent').offset().height
 		        }, 'fast','swing');*/
-			 
+			this.message = '';
 		};
-		$scope.messageEvent = function(ev){
-			if(ev.keyCode == 13 && !ev.ctrlKey){
+		$scope.messageEvent = function(event){
+			if(event.keyCode == 13 && !event.ctrlKey){
 				this.sendMessage();
-				ev.returnValue=false;
-				ev.cancelBubble=true;
+				event.cancelBubble = true;
+                //event.returnValue = false;
+				//ev.cancelBubble=true;
+				event.preventDefault();
+				return false;
 			}
+			
 		};
 		$scope.typingMessage = function() {
 			console.log('Typing...');
@@ -112,9 +137,11 @@ app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
         socket.on('chat', function (data) {
         	console.log(data);
         });
-        socket.on("private", function(data) {        	 
+        
+        socket.on("private", function(data) {
+        	socket.emit("message_received", {mid: data.msg.mid});
        	 	//console.log(data);
-        	$("div#messageContent").append("<br />\r\n" + data.from + ': ' + data.msg);
+        	$("div#messageContent").append("<div><label class='friend_content'>" + data.from + "</label><p class='msg-content'>" + data.msg.content + '<p></div>');
         }); 
         socket.on('broadcast', function (data) {
         	console.log(data);
@@ -133,7 +160,7 @@ app.controller('ChatCtrl',[ '$rootScope', '$scope', 'Users', 'Auth',
         socket.on('connect', function() {
         	$scope.connecting = 'Chose one friend on left frame to start';
         	$scope.$apply();
-        	socket.emit('register', Auth.user.username);
+        	socket.emit('register', Auth.user);
          });
         
         socket.on('disconnect', function($scope) {
