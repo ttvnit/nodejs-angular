@@ -27,6 +27,11 @@ var routes = [
         middleware: [AuthCtrl.register]
     },
     {
+        path: '/user/:uid',
+        httpMethod: 'GET',
+        middleware: [UserCtrl.profile]
+    },
+    {
         path: '/login',
         httpMethod: 'POST',
         middleware: [AuthCtrl.login]
@@ -43,6 +48,11 @@ var routes = [
         httpMethod: 'GET',
         middleware: [UserCtrl.index],
         accessLevel: accessLevels.admin
+    },
+    {
+        path: '/chatlist',
+        httpMethod: 'GET',
+        middleware: [UserCtrl.chatlist],
     },
     // Message resource
     {

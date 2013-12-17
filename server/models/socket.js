@@ -15,7 +15,7 @@ module.exports = function(app) {
 			Messages.addMessage(data,function(result){
 				console.log(result);
 				if(users[data.to.uid]){
-					users[data.to.uid].emit("private", { from: socket.user.username, to: data.to.username, msg: {mid: result.insertId, content:data.msg} });
+					users[data.to.uid].emit("private", {from_id: socket.user.uid, from: socket.user.username, to: data.to.username, msg: {mid: result.insertId, content:data.msg} });
 				}
 			});
 	        //socket.emit("private", { from: socket.nickname, to: data.to, msg: data.msg });

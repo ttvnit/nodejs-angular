@@ -55,6 +55,12 @@ app.factory('Users', function($http) {
     return {
         getAll: function(success, error) {
             $http.get('/users').success(success).error(error);
+        },
+        getUserById: function(uid, success, error) {
+            $http.get('/user/'+uid).success(success).error(error);
+        },
+        getChatlist: function(success, error) {
+        	$http.get('/chatlist').success(success).error(error);
         }
     };
 });

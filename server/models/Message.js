@@ -19,7 +19,7 @@ module.exports = {
 	    },
 	    getMessages: function(req, callback){
 	    	db.query('select * from user_messages where from_uid in (?,?) and to_uid in (?,?)',[req.body.from,req.body.to,req.body.from,req.body.to],function(result){
-	    		console.log(result);
+	    		//console.log(result);
 	    		callback(result);	
 	    	});
 	    	//return [{mid: 1,msg: 'tuan',created: 234},{mid: 1,msg: 'thanh',created: 123}];

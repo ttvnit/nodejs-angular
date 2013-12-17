@@ -81,7 +81,9 @@ module.exports = {
         	return _.clone(user); 
         });
     },
-
+    findAllExcept: function(id) {
+    	 return _.filter(users, function(user) { return user.uid != id; });
+    },
     findById: function(id) {
         return _.clone(_.find(users, function(user) { return user.uid === id; }));
     },
@@ -108,9 +110,9 @@ module.exports = {
 
     localStrategy: new LocalStrategy(
         function(username, password, done) {
-
             var user = module.exports.findByUsername(username);
-            user.role = JSON.parse(user.role);
+            if(typeof user.role == 'string')
+            	user.role = JSON.parse(user.role);
             
             if(!user) {
                 done(null, false, { message: 'Incorrect username.' });
@@ -132,6 +134,7 @@ module.exports = {
         var user = module.exports.findById(id);
 
         if(user)    { 
+        	if(typeof user.role ==  'string')
         	user.role = JSON.parse(user.role);
         	done(null, user); 
         }

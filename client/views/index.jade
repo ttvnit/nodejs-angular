@@ -3,7 +3,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
     head
         meta(charset='utf-8')
         title Angular Auth Example
-        link(rel='stylesheet', href='css/app.css')
+        link(rel='stylesheet', href='/css/app.css')
         //link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css", rel="stylesheet")
         //link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css", rel="stylesheet")
 
@@ -34,7 +34,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                                 a(href="", data-ng-click="logout()") Log out
                         div#userInfo.pull-right(data-access-level='accessLevels.user')
                             | Welcome&nbsp;
-                            strong {{ user.username }}&nbsp;
+                            a(href='/myprofile')
+                                strong {{ user.username }}&nbsp;
                             span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
     
             .container
@@ -77,3 +78,5 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/chat            
         script(type="text/ng-template", id="register")
             include partials/register
+        script(type="text/ng-template", id="edit-profile")
+            include partials/edit-profile

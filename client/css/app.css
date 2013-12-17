@@ -4194,7 +4194,7 @@ div.animate-switch {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     margin-bottom: 20px;
     min-height: 20px;
-    padding: 16px;
+    padding: 16px 0 16px 16px;
 }
 #messageWrapper {
 	position:relative;
@@ -4203,7 +4203,8 @@ div.animate-switch {
 	height: 300px;
 }
 #messageContent {
-	position:ablosute;
+	position:absolute;
+	display:block;
 	width: 350px;
 }
 #chatForm textarea,
@@ -4215,6 +4216,11 @@ div.animate-switch {
 }
 #messageContent div.line {
 	display:block;
+}
+#messageContent ul {
+	margin: 0;
+	padding:0;
+	list-style:none;
 }
 #messageContent label {
 	clear:both;

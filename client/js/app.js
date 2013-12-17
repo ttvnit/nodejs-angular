@@ -24,6 +24,12 @@ var app = angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute'])
             controller:     'RegisterCtrl',
             access:         access.anon
         })
+        .when('/myprofile',
+        {
+            templateUrl:    'edit-profile',
+            controller:     'UserCtrl',
+            access:         access.user
+        })
     	.when('/private',
         {
             templateUrl:    'private',
