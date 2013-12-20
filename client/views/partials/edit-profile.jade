@@ -9,6 +9,14 @@ form.form-horizontal(ng-submit="register()", name="registerForm")
         .controls
             input(type="text", data-ng-model="user.last_name", placeholder="Last name", name="last_name", data-ng-maxlength="20")
     .control-group
+        label.control-label Gender
+        label.radio.inline
+            input(type="radio", name="gender", data-ng-model="user.gender", id="gender", data-ng-value="1")
+            | Male
+        label.radio.inline
+            input(type="radio", name="gender", data-ng-model="user.gender", id="gender", data-ng-value="0")
+            | Female            
+    .control-group
         label.control-label(for="mail") E-mail
         .controls
             input(type="text", data-ng-model="user.mail", placeholder="E-mail", name="mail",  data-ng-maxlength="20")            
